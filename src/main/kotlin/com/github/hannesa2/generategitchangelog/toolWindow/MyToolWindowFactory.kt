@@ -1,16 +1,19 @@
 package com.github.hannesa2.generategitchangelog.toolWindow
 
+import com.github.hannesa2.generategitchangelog.MyBundle
+import com.github.hannesa2.generategitchangelog.services.MyProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.hannesa2.generategitchangelog.MyBundle
-import com.github.hannesa2.generategitchangelog.services.MyProjectService
+import javax.swing.DefaultListModel
 import javax.swing.JButton
+import javax.swing.ListSelectionModel
 
 
 class MyToolWindowFactory : ToolWindowFactory {
@@ -34,12 +37,25 @@ class MyToolWindowFactory : ToolWindowFactory {
         fun getContent() = JBPanel<JBPanel<*>>().apply {
             val label = JBLabel(MyBundle.message("randomLabel", "?"))
 
+
+            // Create a DefaultListModel to hold the data
+            val dataModel = DefaultListModel<String?>()
+            dataModel.addElement("one")
+            dataModel.addElement("two")
+            dataModel.addElement("three")
+            val list = JBList(dataModel)
+            list.emptyText.text = "empty"
+            list.selectionMode = ListSelectionModel.SINGLE_SELECTION
+
             add(label)
             add(JButton(MyBundle.message("shuffle")).apply {
                 addActionListener {
                     label.text = MyBundle.message("randomLabel", service.getRandomNumber())
                 }
             })
+//            val mainPanel = JBLoadingPanel(BorderLayout(), this, 0)
+//            mainPanel.add(list, BorderLayout.CENTER)
+            add(list)
         }
     }
 }
